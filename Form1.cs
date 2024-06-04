@@ -32,7 +32,7 @@ namespace AMP8000_EtherCAT
         static ITcSysManager10 _systemManager;
         // Path to home folder
         static string _home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        static string _target_dir = _home + "\\Temp\\AMP8000_EtherCAT";
+        //static string _target_dir = _home + "\\Temp\\AMP8000_EtherCAT";
         static string _tmp_dir = System.IO.Path.GetTempPath() + "\\AMP8000_EtherCAT";
         static string ipv4EcMaster;
         static string ipb4EcGateway = "192.168.67.254";
@@ -85,9 +85,9 @@ namespace AMP8000_EtherCAT
                     return "";
             }
         }
-        private async void btnUpdateEcState_Click(object sender, EventArgs e)
+        
+        private async void updateData()
         {
-            bool readEcMasterState = true;
             try
             {
                 ResultReadDeviceState resultRtState = await clientRouter.ReadStateAsync(cancel);
@@ -98,7 +98,7 @@ namespace AMP8000_EtherCAT
                     tbRuntimeState.Text = resultRtState.State.AdsState.ToString();
                     if (resultRtState.State.AdsState == AdsState.Run)
                     {
-                        readEcMasterState = true;
+                        //readEcMasterState = true;
                     }
 
                 }
@@ -109,88 +109,105 @@ namespace AMP8000_EtherCAT
             }
 
 
-            if (readEcMasterState)
+
+            // Read EtherCAT Master state
+            try
             {
-                // Read EtherCAT Master state
-                try
-                {
-                    ResultValue<UInt16> resultRead = await clientEcMaster.ReadAnyAsync<UInt16>(0x00000003, 0x00000100, cancel);
+                ResultValue<UInt16> resultRead = await clientEcMaster.ReadAnyAsync<UInt16>(0x00000003, 0x00000100, cancel);
 
-                    if (resultRead.Succeeded)
-                    {
-                        tblEcMasterState.Text = num_to_ec_state((uint)resultRead.Value);
-                    }
-                }
-                catch (Exception)
+                if (resultRead.Succeeded)
                 {
-                    tbState.AppendText("Exception reading EcMaster state - TODO\r\n");
-                }
-
-                // Read device Name
-                try
-                {
-                    // Read ANSI String string[80]
-                    int byteSize = 81; // Size of 80 ANSI chars + /0 (STRING[80])
-                    PrimitiveTypeMarshaler converter = new PrimitiveTypeMarshaler(StringMarshaler.DefaultEncoding);
-                    byte[] buffer = new byte[byteSize];
-
-                    ResultRead resultRead = await clientEcSlave.ReadAsync(0x0000F302, 0x10080000, buffer.AsMemory(), cancel);
-
-                    if (resultRead.Succeeded)
-                    {
-                        string value = null;
-                        converter.Unmarshal<string>(buffer.AsSpan(), out value);
-                        tbAmpName.Text = value;
-                        decodeAmpName(value);
-                    }
-                }
-                catch (Exception)
-                {
-                    tbState.AppendText("Exception reading EcMaster state - TODO\r\n");
-                }
-                // Read FSoE Address
-                try
-                {
-                    ResultValue<UInt16> resultRead = await clientEcSlave.ReadAnyAsync<UInt16>(0x0000F302, 0xF9800001, cancel);
-
-                    if (resultRead.Succeeded)
-                    {
-                        tbFSoEaddr.Text = resultRead.Value.ToString();
-                    }
-                }
-                catch (Exception)
-                {
-                    tbState.AppendText("Exception reading FSoE Address - TODO\r\n");
-                }
-                // Read Safety Serial Number
-                try
-                {
-                    ResultValue<UInt32> resultRead = await clientEcSlave.ReadAnyAsync<UInt32>(0x0000F302, 0xF9800002, cancel);
-
-                    if (resultRead.Succeeded)
-                    {
-                        tbSerialNo.Text = resultRead.Value.ToString("X");
-                    }
-                }
-                catch (Exception)
-                {
-                    tbState.AppendText("Exception reading Safety serial number - TODO\r\n");
-                }
-                // Read Safety CRC
-                try
-                {
-                    ResultValue<UInt16> resultRead = await clientEcSlave.ReadAnyAsync<UInt16>(0x0000F302, 0xF9800003, cancel);
-
-                    if (resultRead.Succeeded)
-                    {
-                        tbSafetyCRC.Text = resultRead.Value.ToString("X");
-                    }
-                }
-                catch (Exception)
-                {
-                    tbState.AppendText("Exception reading Safety CRC - TODO\r\n");
+                    tblEcMasterState.Text = num_to_ec_state((uint)resultRead.Value);
                 }
             }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading EcMaster state - TODO\r\n");
+            }
+
+            // Read EtherCAT Slave state
+            try
+            {
+                ResultValue<UInt16> resultRead = await clientEcMaster.ReadAnyAsync<UInt16>(0x00000009, 0x000003e9, cancel);
+
+                if (resultRead.Succeeded)
+                {
+                    tblEcSlaveState.Text = num_to_ec_state((byte)(resultRead.Value & (byte)0xFF));
+                }
+            }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading EcSlave state - TODO\r\n");
+            }
+
+            // Read device Name
+            try
+            {
+                // Read ANSI String string[80]
+                int byteSize = 81; // Size of 80 ANSI chars + /0 (STRING[80])
+                PrimitiveTypeMarshaler converter = new PrimitiveTypeMarshaler(StringMarshaler.DefaultEncoding);
+                byte[] buffer = new byte[byteSize];
+
+                ResultRead resultRead = await clientEcSlave.ReadAsync(0x0000F302, 0x10080000, buffer.AsMemory(), cancel);
+
+                if (resultRead.Succeeded)
+                {
+                    string value = null;
+                    converter.Unmarshal<string>(buffer.AsSpan(), out value);
+                    tbAmpName.Text = value;
+                    decodeAmpName(value);
+                }
+            }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading EcMaster state - TODO\r\n");
+            }
+            // Read FSoE Address
+            try
+            {
+                ResultValue<UInt16> resultRead = await clientEcSlave.ReadAnyAsync<UInt16>(0x0000F302, 0xF9800001, cancel);
+
+                if (resultRead.Succeeded)
+                {
+                    tbFSoEaddr.Text = resultRead.Value.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading FSoE Address - TODO\r\n");
+            }
+            // Read Safety Serial Number
+            try
+            {
+                ResultValue<UInt32> resultRead = await clientEcSlave.ReadAnyAsync<UInt32>(0x0000F302, 0xF9800002, cancel);
+
+                if (resultRead.Succeeded)
+                {
+                    tbSerialNo.Text = resultRead.Value.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading Safety serial number - TODO\r\n");
+            }
+            // Read Safety CRC
+            try
+            {
+                ResultValue<UInt16> resultRead = await clientEcSlave.ReadAnyAsync<UInt16>(0x0000F302, 0xF9800003, cancel);
+
+                if (resultRead.Succeeded)
+                {
+                    tbSafetyCRC.Text = resultRead.Value.ToString("X");
+                }
+            }
+            catch (Exception)
+            {
+                tbState.AppendText("Exception reading Safety CRC - TODO\r\n");
+            }
+        }
+        private async void btnUpdateEcState_Click(object sender, EventArgs e)
+        {
+            updateData();
         }
 
         private async void readBreakeState()
@@ -225,64 +242,67 @@ namespace AMP8000_EtherCAT
             char encoder = deviceName[10];
             char brake = deviceName[11];
 
-            switch (rpm)
-            {
-                case 'D':
-                    rb3000.Checked = true; break;
-                case 'E':
-                    rb6000.Checked = true; break;
-                case 'H':
-                    rb9000.Checked = true; break;
-
-            }
-
-            switch (shaft)
-            {
-                case '0':
-                    rbShaftOption0.Checked = true; break;
-                case '1':
-                    rbShaftOption1.Checked = true; break;
-                case '2':
-                    rbShaftOption2.Checked = true; break;
-                case '3':
-                    rbShaftOption3.Checked = true; break;
-                case '4':
-                    rbShaftOption4.Checked = true; break;
-                case '5':
-                    rbShaftOption5.Checked = true; break;
-            }
-
             switch (encoder)
             {
                 case '1':
                     rbSingleTurn.Checked = true;
-                    rbStoSs1.Checked = true; break;
+                    rbSingleTurn.Enabled = true;
+                    rbMultiTurn.Checked = false;
+                    rbMultiTurn.Enabled = false;
+                    rbStoSs1.Checked = true;
+                    rbStoSs1.Enabled = true;
+                    rbSafeMotion.Checked = false;
+                    rbSafeMotion.Enabled = false;
+                    break;
                 case '2':
                     rbMultiTurn.Checked = true;
-                    rbStoSs1.Checked = true; break;
+                    rbMultiTurn.Enabled = true;
+                    rbSingleTurn.Checked = false;
+                    rbSingleTurn.Enabled = false;
+                    rbStoSs1.Checked = true;
+                    rbStoSs1.Enabled = true;
+                    rbSafeMotion.Checked = false;
+                    rbSafeMotion.Enabled = false;
+                    break;
                 case '3':
                     rbSingleTurn.Checked = true;
-                    rbSafeMotion.Checked = true; break;
+                    rbSingleTurn.Enabled = true;
+                    rbMultiTurn.Checked = false;
+                    rbMultiTurn.Enabled = false;
+                    rbSafeMotion.Checked = true;
+                    rbSafeMotion.Enabled = true;
+                    rbStoSs1.Checked = false;
+                    rbStoSs1.Enabled = false;
+                    break;
                 case '4':
                     rbMultiTurn.Checked = true;
-                    rbSafeMotion.Checked = true; break;
+                    rbMultiTurn.Enabled = true;
+                    rbSingleTurn.Checked = false;
+                    rbSingleTurn.Enabled = false;
+                    rbSafeMotion.Checked = true;
+                    rbSafeMotion.Enabled = true;
+                    rbStoSs1.Checked = false;
+                    rbStoSs1.Enabled = false;
+                    break;
             }
 
             if (brake == '1')
             {
                 cbHoldingBrake.Checked = true;
+                cbHoldingBrake.Enabled = true;
                 btnBrakeCtrl.Enabled = true;
                 readBreakeState();
             }
             else
             {
                 cbHoldingBrake.Checked = false;
+                cbHoldingBrake.Enabled= false;
                 btnBrakeCtrl.Enabled = false;
             }
 
 
         }
-        private void btnScan_Click(object sender, EventArgs e)
+        private async void btnScan_Click(object sender, EventArgs e)
         {
             tbState.AppendText("Start scanning network devices...\r\n");
 
@@ -331,7 +351,7 @@ namespace AMP8000_EtherCAT
                 Directory.Delete(_tmp_dir, true);
 
             Directory.CreateDirectory(_tmp_dir);
-
+            Thread.Sleep(5000);
             dynamic solution = _dte.Solution;
             solution.Create(_tmp_dir, "AMP8_BrakeCtrl");
             solution.SaveAs(_tmp_dir + "\\AMP8000_EtherCAT.sln");
@@ -418,7 +438,18 @@ namespace AMP8000_EtherCAT
                     // Disable revision check
                     var childCnt = EcMasterDevice.ChildCount;
 
-                    ITcSmTreeItem Amp_motor = EcMasterDevice.Child[1];
+
+                    ITcSmTreeItem Amp_motor = null;
+                    try
+                    {
+                        Amp_motor = EcMasterDevice.Child[1];
+                    }
+                    catch (Exception)
+                    {
+                        tbState.AppendText("No Motor connected. Abort.\r\n");
+                        return;
+                    }
+                    
                     string ampxml = Amp_motor.ProduceXml(false);
 
 
@@ -466,7 +497,33 @@ namespace AMP8000_EtherCAT
             _dte.ExecuteCommand("TwinCAT.Konfigurationaktivieren", "");
 
 
-            tbState.AppendText("Waiting for Run mode\r\n");
+            tbState.AppendText("Waiting for Run mode");
+            StateInfo rtStateInfo = new StateInfo() { AdsState = AdsState.Config, DeviceState = 0 };
+            bool runMode = false;
+            int attemptCnt = 0;
+            do
+            {
+                attemptCnt++;
+                if(attemptCnt > 10)
+                {
+                    tbState.AppendText("Runtime could not be started\r\n");
+                    break;
+                }
+                Thread.Sleep(1000);
+                try
+                {
+                    rtStateInfo = clientRouter.ReadState();
+                }
+                catch (Exception)
+                {
+                }
+
+                tbState.AppendText(".");
+
+            } while (rtStateInfo.AdsState != AdsState.Run);
+
+            tbState.AppendText("\r\nRuntime started!\r\n");
+            updateData();
         }
 
         private async void btnBrakeCtrl_Click(object sender, EventArgs e)

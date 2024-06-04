@@ -39,31 +39,24 @@
             lblEcMasterIP = new Label();
             lblGatewayIP_a = new Label();
             gbRtState = new GroupBox();
+            tblEcSlaveState = new TextBox();
+            lblEcSlaveState = new Label();
             tblEcMasterState = new TextBox();
             tbRuntimeState = new TextBox();
             lblEcMasterState = new Label();
             lblRuntimeState = new Label();
             gbAMPInfo = new GroupBox();
+            btnBrakeCtrl = new Button();
             rbSafeMotion = new RadioButton();
             rbStoSs1 = new RadioButton();
             rbMultiTurn = new RadioButton();
             rbSingleTurn = new RadioButton();
             cbHoldingBrake = new CheckBox();
-            rb9000 = new RadioButton();
             lblHoldingBrake = new Label();
-            rb6000 = new RadioButton();
-            rb3000 = new RadioButton();
             lblTwinSAFEMotion = new Label();
             lblEncoder = new Label();
-            lblRpm = new Label();
             tbAmpName = new TextBox();
             lblAmpName = new Label();
-            rbShaftOption5 = new RadioButton();
-            rbShaftOption4 = new RadioButton();
-            rbShaftOption3 = new RadioButton();
-            rbShaftOption2 = new RadioButton();
-            rbShaftOption1 = new RadioButton();
-            rbShaftOption0 = new RadioButton();
             tbState = new TextBox();
             lblSafeCrc = new Label();
             tbSafetyCRC = new TextBox();
@@ -72,20 +65,17 @@
             lblFSoEaddr = new Label();
             tbFSoEaddr = new TextBox();
             grpSafetyParameter = new GroupBox();
-            gbMotorShaft = new GroupBox();
-            btnBrakeCtrl = new Button();
             gbGateway.SuspendLayout();
             gbRtState.SuspendLayout();
             gbAMPInfo.SuspendLayout();
             grpSafetyParameter.SuspendLayout();
-            gbMotorShaft.SuspendLayout();
             SuspendLayout();
             // 
             // btnScan
             // 
-            btnScan.Location = new Point(24, 122);
+            btnScan.Location = new Point(24, 101);
             btnScan.Name = "btnScan";
-            btnScan.Size = new Size(212, 23);
+            btnScan.Size = new Size(212, 35);
             btnScan.TabIndex = 0;
             btnScan.Text = "Create Configuration";
             btnScan.UseVisualStyleBackColor = true;
@@ -104,7 +94,7 @@
             // cbHideTcXae
             // 
             cbHideTcXae.AutoSize = true;
-            cbHideTcXae.Location = new Point(73, 151);
+            cbHideTcXae.Location = new Point(74, 151);
             cbHideTcXae.Name = "cbHideTcXae";
             cbHideTcXae.Size = new Size(109, 19);
             cbHideTcXae.TabIndex = 2;
@@ -181,6 +171,8 @@
             // 
             // gbRtState
             // 
+            gbRtState.Controls.Add(tblEcSlaveState);
+            gbRtState.Controls.Add(lblEcSlaveState);
             gbRtState.Controls.Add(tblEcMasterState);
             gbRtState.Controls.Add(tbRuntimeState);
             gbRtState.Controls.Add(lblEcMasterState);
@@ -192,9 +184,27 @@
             gbRtState.TabStop = false;
             gbRtState.Text = "State";
             // 
+            // tblEcSlaveState
+            // 
+            tblEcSlaveState.Location = new Point(156, 101);
+            tblEcSlaveState.Name = "tblEcSlaveState";
+            tblEcSlaveState.ReadOnly = true;
+            tblEcSlaveState.Size = new Size(83, 23);
+            tblEcSlaveState.TabIndex = 5;
+            tblEcSlaveState.TextAlign = HorizontalAlignment.Right;
+            // 
+            // lblEcSlaveState
+            // 
+            lblEcSlaveState.AutoSize = true;
+            lblEcSlaveState.Location = new Point(19, 104);
+            lblEcSlaveState.Name = "lblEcSlaveState";
+            lblEcSlaveState.Size = new Size(114, 15);
+            lblEcSlaveState.TabIndex = 4;
+            lblEcSlaveState.Text = "EtherCAT Slave State";
+            // 
             // tblEcMasterState
             // 
-            tblEcMasterState.Location = new Point(156, 59);
+            tblEcMasterState.Location = new Point(156, 64);
             tblEcMasterState.Name = "tblEcMasterState";
             tblEcMasterState.ReadOnly = true;
             tblEcMasterState.Size = new Size(83, 23);
@@ -213,7 +223,7 @@
             // lblEcMasterState
             // 
             lblEcMasterState.AutoSize = true;
-            lblEcMasterState.Location = new Point(19, 63);
+            lblEcMasterState.Location = new Point(19, 68);
             lblEcMasterState.Name = "lblEcMasterState";
             lblEcMasterState.Size = new Size(123, 15);
             lblEcMasterState.TabIndex = 1;
@@ -236,27 +246,35 @@
             gbAMPInfo.Controls.Add(rbMultiTurn);
             gbAMPInfo.Controls.Add(rbSingleTurn);
             gbAMPInfo.Controls.Add(cbHoldingBrake);
-            gbAMPInfo.Controls.Add(rb9000);
             gbAMPInfo.Controls.Add(lblHoldingBrake);
-            gbAMPInfo.Controls.Add(rb6000);
-            gbAMPInfo.Controls.Add(rb3000);
             gbAMPInfo.Controls.Add(lblTwinSAFEMotion);
             gbAMPInfo.Controls.Add(lblEncoder);
-            gbAMPInfo.Controls.Add(lblRpm);
             gbAMPInfo.Controls.Add(tbAmpName);
             gbAMPInfo.Controls.Add(lblAmpName);
             gbAMPInfo.Location = new Point(24, 359);
             gbAMPInfo.Name = "gbAMPInfo";
-            gbAMPInfo.Size = new Size(541, 231);
+            gbAMPInfo.Size = new Size(541, 197);
             gbAMPInfo.TabIndex = 5;
             gbAMPInfo.TabStop = false;
             gbAMPInfo.Text = "General";
+            // 
+            // btnBrakeCtrl
+            // 
+            btnBrakeCtrl.Enabled = false;
+            btnBrakeCtrl.Location = new Point(244, 54);
+            btnBrakeCtrl.Name = "btnBrakeCtrl";
+            btnBrakeCtrl.Size = new Size(208, 23);
+            btnBrakeCtrl.TabIndex = 0;
+            btnBrakeCtrl.Text = "Unlock";
+            btnBrakeCtrl.UseVisualStyleBackColor = true;
+            btnBrakeCtrl.Click += btnBrakeCtrl_Click;
             // 
             // rbSafeMotion
             // 
             rbSafeMotion.AutoCheck = false;
             rbSafeMotion.AutoSize = true;
-            rbSafeMotion.Location = new Point(271, 198);
+            rbSafeMotion.Enabled = false;
+            rbSafeMotion.Location = new Point(271, 159);
             rbSafeMotion.Name = "rbSafeMotion";
             rbSafeMotion.Size = new Size(89, 19);
             rbSafeMotion.TabIndex = 15;
@@ -268,7 +286,8 @@
             // 
             rbStoSs1.AutoCheck = false;
             rbStoSs1.AutoSize = true;
-            rbStoSs1.Location = new Point(196, 198);
+            rbStoSs1.Enabled = false;
+            rbStoSs1.Location = new Point(196, 159);
             rbStoSs1.Name = "rbStoSs1";
             rbStoSs1.Size = new Size(69, 19);
             rbStoSs1.TabIndex = 14;
@@ -280,7 +299,8 @@
             // 
             rbMultiTurn.AutoCheck = false;
             rbMultiTurn.AutoSize = true;
-            rbMultiTurn.Location = new Point(197, 161);
+            rbMultiTurn.Enabled = false;
+            rbMultiTurn.Location = new Point(197, 122);
             rbMultiTurn.Name = "rbMultiTurn";
             rbMultiTurn.Size = new Size(174, 19);
             rbMultiTurn.TabIndex = 13;
@@ -292,7 +312,8 @@
             // 
             rbSingleTurn.AutoCheck = false;
             rbSingleTurn.AutoSize = true;
-            rbSingleTurn.Location = new Point(197, 136);
+            rbSingleTurn.Enabled = false;
+            rbSingleTurn.Location = new Point(197, 97);
             rbSingleTurn.Name = "rbSingleTurn";
             rbSingleTurn.Size = new Size(178, 19);
             rbSingleTurn.TabIndex = 12;
@@ -304,61 +325,26 @@
             // 
             cbHoldingBrake.AutoCheck = false;
             cbHoldingBrake.AutoSize = true;
-            cbHoldingBrake.Location = new Point(198, 97);
+            cbHoldingBrake.Enabled = false;
+            cbHoldingBrake.Location = new Point(197, 58);
             cbHoldingBrake.Name = "cbHoldingBrake";
             cbHoldingBrake.Size = new Size(15, 14);
             cbHoldingBrake.TabIndex = 11;
             cbHoldingBrake.UseVisualStyleBackColor = true;
             // 
-            // rb9000
-            // 
-            rb9000.AutoCheck = false;
-            rb9000.AutoSize = true;
-            rb9000.Location = new Point(375, 58);
-            rb9000.Name = "rb9000";
-            rb9000.Size = new Size(84, 19);
-            rb9000.TabIndex = 9;
-            rb9000.TabStop = true;
-            rb9000.Text = "9000 min-1";
-            rb9000.UseVisualStyleBackColor = true;
-            // 
             // lblHoldingBrake
             // 
             lblHoldingBrake.AutoSize = true;
-            lblHoldingBrake.Location = new Point(20, 97);
+            lblHoldingBrake.Location = new Point(20, 58);
             lblHoldingBrake.Name = "lblHoldingBrake";
             lblHoldingBrake.Size = new Size(82, 15);
             lblHoldingBrake.TabIndex = 10;
             lblHoldingBrake.Text = "Holding brake";
             // 
-            // rb6000
-            // 
-            rb6000.AutoCheck = false;
-            rb6000.AutoSize = true;
-            rb6000.Location = new Point(281, 58);
-            rb6000.Name = "rb6000";
-            rb6000.Size = new Size(84, 19);
-            rb6000.TabIndex = 8;
-            rb6000.TabStop = true;
-            rb6000.Text = "6000 min-1";
-            rb6000.UseVisualStyleBackColor = true;
-            // 
-            // rb3000
-            // 
-            rb3000.AutoCheck = false;
-            rb3000.AutoSize = true;
-            rb3000.Location = new Point(196, 58);
-            rb3000.Name = "rb3000";
-            rb3000.Size = new Size(84, 19);
-            rb3000.TabIndex = 7;
-            rb3000.TabStop = true;
-            rb3000.Text = "3000 min-1";
-            rb3000.UseVisualStyleBackColor = true;
-            // 
             // lblTwinSAFEMotion
             // 
             lblTwinSAFEMotion.AutoSize = true;
-            lblTwinSAFEMotion.Location = new Point(20, 202);
+            lblTwinSAFEMotion.Location = new Point(20, 163);
             lblTwinSAFEMotion.Name = "lblTwinSAFEMotion";
             lblTwinSAFEMotion.Size = new Size(99, 15);
             lblTwinSAFEMotion.TabIndex = 8;
@@ -367,20 +353,11 @@
             // lblEncoder
             // 
             lblEncoder.AutoSize = true;
-            lblEncoder.Location = new Point(20, 151);
+            lblEncoder.Location = new Point(20, 112);
             lblEncoder.Name = "lblEncoder";
             lblEncoder.Size = new Size(50, 15);
             lblEncoder.TabIndex = 6;
             lblEncoder.Text = "Encoder";
-            // 
-            // lblRpm
-            // 
-            lblRpm.AutoSize = true;
-            lblRpm.Location = new Point(20, 62);
-            lblRpm.Name = "lblRpm";
-            lblRpm.Size = new Size(32, 15);
-            lblRpm.TabIndex = 2;
-            lblRpm.Text = "RPM";
             // 
             // tbAmpName
             // 
@@ -400,83 +377,12 @@
             lblAmpName.TabIndex = 0;
             lblAmpName.Text = "Name";
             // 
-            // rbShaftOption5
-            // 
-            rbShaftOption5.AutoCheck = false;
-            rbShaftOption5.AutoSize = true;
-            rbShaftOption5.Location = new Point(18, 149);
-            rbShaftOption5.Name = "rbShaftOption5";
-            rbShaftOption5.Size = new Size(435, 19);
-            rbShaftOption5.TabIndex = 21;
-            rbShaftOption5.TabStop = true;
-            rbShaftOption5.Text = "IP65 sealing ring, shaft with groove and feather key and sealing air connection";
-            rbShaftOption5.UseVisualStyleBackColor = true;
-            // 
-            // rbShaftOption4
-            // 
-            rbShaftOption4.AutoCheck = false;
-            rbShaftOption4.AutoSize = true;
-            rbShaftOption4.Location = new Point(18, 121);
-            rbShaftOption4.Name = "rbShaftOption4";
-            rbShaftOption4.Size = new Size(329, 19);
-            rbShaftOption4.TabIndex = 20;
-            rbShaftOption4.TabStop = true;
-            rbShaftOption4.Text = "IP65 sealing ring, smooth shaft and sealing air connection";
-            rbShaftOption4.UseVisualStyleBackColor = true;
-            // 
-            // rbShaftOption3
-            // 
-            rbShaftOption3.AutoCheck = false;
-            rbShaftOption3.AutoSize = true;
-            rbShaftOption3.Location = new Point(18, 96);
-            rbShaftOption3.Name = "rbShaftOption3";
-            rbShaftOption3.Size = new Size(293, 19);
-            rbShaftOption3.TabIndex = 19;
-            rbShaftOption3.TabStop = true;
-            rbShaftOption3.Text = "IP65 sealing ring, shaft with groove and feather key";
-            rbShaftOption3.UseVisualStyleBackColor = true;
-            // 
-            // rbShaftOption2
-            // 
-            rbShaftOption2.AutoCheck = false;
-            rbShaftOption2.AutoSize = true;
-            rbShaftOption2.Location = new Point(18, 71);
-            rbShaftOption2.Name = "rbShaftOption2";
-            rbShaftOption2.Size = new Size(207, 19);
-            rbShaftOption2.TabIndex = 18;
-            rbShaftOption2.TabStop = true;
-            rbShaftOption2.Text = "IP65 sealing ring and smooth shaft";
-            rbShaftOption2.UseVisualStyleBackColor = true;
-            // 
-            // rbShaftOption1
-            // 
-            rbShaftOption1.AutoCheck = false;
-            rbShaftOption1.AutoSize = true;
-            rbShaftOption1.Location = new Point(18, 46);
-            rbShaftOption1.Name = "rbShaftOption1";
-            rbShaftOption1.Size = new Size(267, 19);
-            rbShaftOption1.TabIndex = 17;
-            rbShaftOption1.TabStop = true;
-            rbShaftOption1.Text = "Groove and feather key according to DIN 6885";
-            rbShaftOption1.UseVisualStyleBackColor = true;
-            // 
-            // rbShaftOption0
-            // 
-            rbShaftOption0.AutoCheck = false;
-            rbShaftOption0.AutoSize = true;
-            rbShaftOption0.Location = new Point(18, 21);
-            rbShaftOption0.Name = "rbShaftOption0";
-            rbShaftOption0.Size = new Size(67, 19);
-            rbShaftOption0.TabIndex = 16;
-            rbShaftOption0.TabStop = true;
-            rbShaftOption0.Text = "Smooth";
-            rbShaftOption0.UseVisualStyleBackColor = true;
-            // 
             // tbState
             // 
-            tbState.Location = new Point(24, 805);
+            tbState.Location = new Point(24, 575);
             tbState.Multiline = true;
             tbState.Name = "tbState";
+            tbState.ReadOnly = true;
             tbState.ScrollBars = ScrollBars.Vertical;
             tbState.Size = new Size(542, 121);
             tbState.TabIndex = 6;
@@ -528,7 +434,7 @@
             // 
             // tbFSoEaddr
             // 
-            tbFSoEaddr.Location = new Point(142, 25);
+            tbFSoEaddr.Location = new Point(142, 26);
             tbFSoEaddr.Name = "tbFSoEaddr";
             tbFSoEaddr.ReadOnly = true;
             tbFSoEaddr.Size = new Size(100, 23);
@@ -550,38 +456,11 @@
             grpSafetyParameter.TabStop = false;
             grpSafetyParameter.Text = "Safety Parameter";
             // 
-            // gbMotorShaft
-            // 
-            gbMotorShaft.Controls.Add(rbShaftOption4);
-            gbMotorShaft.Controls.Add(rbShaftOption5);
-            gbMotorShaft.Controls.Add(rbShaftOption0);
-            gbMotorShaft.Controls.Add(rbShaftOption1);
-            gbMotorShaft.Controls.Add(rbShaftOption2);
-            gbMotorShaft.Controls.Add(rbShaftOption3);
-            gbMotorShaft.Location = new Point(24, 607);
-            gbMotorShaft.Name = "gbMotorShaft";
-            gbMotorShaft.Size = new Size(541, 182);
-            gbMotorShaft.TabIndex = 22;
-            gbMotorShaft.TabStop = false;
-            gbMotorShaft.Text = "Motor Shaft";
-            // 
-            // btnBrakeCtrl
-            // 
-            btnBrakeCtrl.Enabled = false;
-            btnBrakeCtrl.Location = new Point(244, 93);
-            btnBrakeCtrl.Name = "btnBrakeCtrl";
-            btnBrakeCtrl.Size = new Size(208, 23);
-            btnBrakeCtrl.TabIndex = 0;
-            btnBrakeCtrl.Text = "Unlock";
-            btnBrakeCtrl.UseVisualStyleBackColor = true;
-            btnBrakeCtrl.Click += btnBrakeCtrl_Click;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 942);
-            Controls.Add(gbMotorShaft);
+            ClientSize = new Size(584, 715);
             Controls.Add(grpSafetyParameter);
             Controls.Add(tbState);
             Controls.Add(gbAMPInfo);
@@ -591,7 +470,7 @@
             Controls.Add(btnUpdateEcState);
             Controls.Add(btnScan);
             Name = "Form1";
-            Text = "3000 min-1";
+            Text = "AMP8000 EtherCAT 0.10";
             gbGateway.ResumeLayout(false);
             gbGateway.PerformLayout();
             gbRtState.ResumeLayout(false);
@@ -600,8 +479,6 @@
             gbAMPInfo.PerformLayout();
             grpSafetyParameter.ResumeLayout(false);
             grpSafetyParameter.PerformLayout();
-            gbMotorShaft.ResumeLayout(false);
-            gbMotorShaft.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -627,13 +504,9 @@
         private TextBox tblEcMasterState;
         private TextBox tbRuntimeState;
         private TextBox tbAmpName;
-        private Label lblRpm;
         private Label lblEncoder;
         private Label lblTwinSAFEMotion;
         private Label lblHoldingBrake;
-        private RadioButton rb3000;
-        private RadioButton rb6000;
-        private RadioButton rb9000;
         private CheckBox cbHoldingBrake;
         private RadioButton rbSingleTurn;
         private RadioButton rbMultiTurn;
@@ -646,13 +519,8 @@
         private Label lblFSoEaddr;
         private TextBox tbFSoEaddr;
         private GroupBox grpSafetyParameter;
-        private RadioButton rbShaftOption4;
-        private RadioButton rbShaftOption3;
-        private RadioButton rbShaftOption2;
-        private RadioButton rbShaftOption1;
-        private RadioButton rbShaftOption0;
-        private RadioButton rbShaftOption5;
-        private GroupBox gbMotorShaft;
         private Button btnBrakeCtrl;
+        private TextBox tblEcSlaveState;
+        private Label lblEcSlaveState;
     }
 }
